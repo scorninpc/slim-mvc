@@ -1,0 +1,22 @@
+{
+    "name": "scorninpc/slim-mvc-bootstrap",
+    "type": "library",
+    "description": "Slim Framework 4 bootstrap to call simple MVC structure",
+    "keywords": ["slim","framework","slim 4","bootstrap","mvc"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bruno Pitteli Gonçalves",
+            "email": "scorninpc@php.net",
+            "homepage": "https://andor.com.br"
+        }
+    ],
+    "require": {
+        "slim/slim": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Slim\\Mvc\\": "src"
+        }
+    }
+}
