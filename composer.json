@@ -1,5 +1,5 @@
 {
-    "name": "scorninpc/slim-mvc-bootstrap",
+    "name": "scorninpc/slim-mvc",
     "type": "library",
     "description": "Slim Framework 4 bootstrap to call simple MVC structure",
     "keywords": ["slim","framework","slim 4","bootstrap","mvc"],
