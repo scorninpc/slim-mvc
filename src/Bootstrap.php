@@ -56,7 +56,6 @@ class Bootstrap
 		// Verify if controller exists with and without module (because the module can be passed as simple arg, and not as module)
 		$controllerName = "\\Application\\" . $module . "Controllers\\" . strtolower($this->args['controller']) . "Controller";
 		if(!class_exists($controllerName)) {
-			die($controllerName);
 			$controllerName = "\\Application\\Controllers\\" . strtolower($this->args['controller']) . "Controller";
 
 			// Create controller object
