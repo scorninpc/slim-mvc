@@ -13,7 +13,7 @@
     ],
     "require": {
         "slim/slim": "^4.0",
-        "scorninpc/slim-smarty-view": "^2.0"
+        "scorninpc/slim-smarty-view": "dev-main"
     },
     "autoload": {
         "psr-4": {
