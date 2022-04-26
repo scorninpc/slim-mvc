@@ -15,8 +15,26 @@ class Bootstrap
 	/**
 	 * 
 	 */
-	public function __construct(\DI\Container $container, \Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, $args)
+	public function __construct(\DI\Container $container, \Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, $args, $config=[])
 	{
+		// Look if location are set
+		if(!isset($config['application']['name'])) {
+			if(!isset($config['application']['location'])) {
+				$config['application']['location'] = filter_input(INPUT_SERVER, 'DOCUMENT_ROOT') . "/../app";
+			}
+
+			$applicationLocation = realpath($config['application']['location']);
+			$config['application']['name'] = ucfirst($config['application']['name']);
+
+			$applicationName = ucfirst(basename($applicationLocation));
+		}
+		else {
+			$applicationName = $config['application']['name'];
+		}
+
+
+
+
 		// Store application parameters
 		$this->container = $container;
 		$this->request = $request;
@@ -54,9 +72,9 @@ class Bootstrap
 		}
 
 		// Verify if controller exists with and without module (because the module can be passed as simple arg, and not as module)
-		$controllerName = "\\Application\\" . $module . "Controllers\\" . strtolower($this->args['controller']) . "Controller";
+		$controllerName = "\\" . $applicationName . "\\" . $module . "Controllers\\" . strtolower($this->args['controller']) . "Controller";
 		if(!class_exists($controllerName)) {
-			$controllerName = "\\Application\\Controllers\\" . strtolower($this->args['controller']) . "Controller";
+			$controllerName = "\\" . $applicationName . "\\Controllers\\" . strtolower($this->args['controller']) . "Controller";
 
 			// Create controller object
 			if(!class_exists($controllerName)) {
