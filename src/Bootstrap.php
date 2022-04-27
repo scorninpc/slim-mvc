@@ -32,9 +32,6 @@ class Bootstrap
 			$applicationName = $config['application']['name'];
 		}
 
-
-
-
 		// Store application parameters
 		$this->container = $container;
 		$this->request = $request;

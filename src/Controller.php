@@ -35,20 +35,25 @@ class Controller
 			$module = "";
 			$module_name = $this->getParam("module");
 			if($module_name !== NULL) {
-				$module =  "/" . ucfirst($this->getParam("module"));
+				// Get config
+				$config = $this->container->get("config");
+				$module =  realpath($config['application']['modules_location']) . "/" . ucfirst($this->getParam("module"));
+			}
+			else {
+				$module = APPLICATION_PATH;
 			}
 
 			// If not manual set, look if it is disabled, to get action template
 			if($this->view->isTemplateDisabled()) {
-				$templateFile = APPLICATION_PATH . $module . "/Views/" . $this->getParam("controller") . "/" . $this->getParam("action") . ".tpl";
+				$templateFile = $module . "/Views/" . $this->getParam("controller") . "/" . $this->getParam("action") . ".tpl";
 			}
 
 			// If its not disabled, get defined template file
 			else {
-				$templateFile = APPLICATION_PATH . $module . "/Views/layouts/template.tpl";
+				$templateFile = $module . "/Views/layouts/template.tpl";
 
 				// Render content template, and assign to template file
-				$contentFile = APPLICATION_PATH . $module . "/Views/" . $this->getParam("controller") . "/" . $this->getParam("action") . ".tpl";
+				$contentFile = $module . "/Views/" . $this->getParam("controller") . "/" . $this->getParam("action") . ".tpl";
 				if(!file_exists($contentFile)) {
 					throw new \Slim\Exception\HttpNotFoundException($this->request, "Arquivo " . $contentFile . " não encontrado");
 				}
