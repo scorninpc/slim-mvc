@@ -23,6 +23,14 @@ class Controller
 	}
 
 	/**
+	 * get container
+	 */
+	public function getContainer()
+	{
+		return $this->container;
+	}
+
+	/**
 	 * 
 	 */
 	public function run()
