@@ -41,6 +41,24 @@ class Model extends \Illuminate\Database\Eloquent\Model
 	}
 
 	/**
+	 * 
+	 */
+	static public function executeQuery($query, $params=[])
+	{
+		$capsule = new \Illuminate\Database\Capsule\Manager();
+
+		$connection = $capsule->connection();
+		$db = $connection->getPdo();
+		$db->setAttribute(\PDO::ATTR_EMULATE_PREPARES, 1);
+
+		$execution = $db->prepare($query);
+		$execution->execute($params);
+		$result = $execution->fetchAll(\PDO::FETCH_ASSOC);
+
+		return $result;
+	}
+
+	/**
 	 * Hooks
 	 */
 	public function doBeforeConfigure() {}
