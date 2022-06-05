@@ -82,10 +82,32 @@ class Controller
 	 */
 	public function getParam($name, $default=NULL)
 	{
+		// Verifica o get
 		if(!isset($this->args[$name])) {
-			return $default;
+
+			// Verifica o post
+			$post_params = (array)$this->request->getParsedBody();
+			if(!isset($post_params[$name])) {
+				return $default;
+			}
+
+			return $post_params[$name];
 		}
 
 		return $this->args[$name];
+	}
+
+	/**
+	 * 
+	 */
+	public function getPost($name, $default=NULL)
+	{
+		$params = (array)$this->request->getParsedBody();
+
+		if(!isset($params[$name])) {
+			return $default;
+		}
+
+		return $params[$name];
 	}
 }
