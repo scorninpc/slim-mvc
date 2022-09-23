@@ -38,6 +38,14 @@ class Controller
 	{
 		return $this->container;
 	}
+	
+	/**
+	 * get request
+	 */
+	public function getRequest()
+	{
+		return $this->request;
+	}
 
 	/**
 	 * 
