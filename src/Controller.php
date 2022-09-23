@@ -18,8 +18,17 @@ class Controller
 		$this->container = $container;
 		$this->request = $request;
 		$this->response = $response;
-		$this->args = $args;
 		$this->view = $view;
+		
+		$params = $args['params'];
+		if($params) {
+			unset($args['params']);
+			$params_parts = explode("/", $params);
+			for($i=0; $i<count($params_parts); $i+=2) {
+				$args[$params_parts[$i]] = $params_parts[$i+1];
+			}
+		}
+		$this->args = $args;
 	}
 
 	/**
@@ -88,8 +97,11 @@ class Controller
 			// Verifica o post
 			$post_params = (array)$this->request->getParsedBody();
 			if(!isset($post_params[$name])) {
+				// Se nao tem, da o explode
+
 				return $default;
 			}
+
 
 			return $post_params[$name];
 		}
