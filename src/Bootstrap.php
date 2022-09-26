@@ -64,6 +64,7 @@ class Bootstrap
 
 		// Set custom config for view
 		$this->view->__basePath = $config['application']['basepath'];
+		$this->view->__helpers = new \Slim\Mvc\ViewHelpers($request);
 
 		// Verify if there is a module variable
 		$module = "";
