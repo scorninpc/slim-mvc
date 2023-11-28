@@ -35,6 +35,9 @@ class Model extends \Illuminate\Database\Eloquent\Model
 			if($e->getCode() == 55000) {
 				$id = NULL;
 			}
+			else {
+				throw $e;
+			}
 		}
 		
 		return $id;
