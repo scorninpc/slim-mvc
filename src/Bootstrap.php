@@ -79,7 +79,7 @@ class Bootstrap
 
 			// Create controller object
 			if(!class_exists($controllerName)) {
-				throw new \Slim\Exception\HttpNotFoundException($request, "Controlador não encontrado");
+				throw new \Exception("Controlador não encontrado", 404);
 			}
 		}
 
@@ -88,7 +88,7 @@ class Bootstrap
 		// Create and call action
 		$action = $this->args['action'] . "Action";
 		if(!is_callable([$this->controller, $action])) {
-			throw new \Slim\Exception\HttpNotFoundException($request, "Action não encontrada");
+			throw new \Exception("Action não encontrada", 404);
 		}
 		$ret = $this->controller->$action();
 	}

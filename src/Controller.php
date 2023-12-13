@@ -80,7 +80,7 @@ class Controller
 				// Render content template, and assign to template file
 				$contentFile = $module . "/Views/" . $this->getParam("controller") . "/" . $this->getParam("action") . ".tpl";
 				if(!file_exists($contentFile)) {
-					throw new \Slim\Exception\HttpNotFoundException($this->request, "Arquivo " . $contentFile . " não encontrado");
+					throw new \Exception("Arquivo " . $contentFile . " não encontrado", 500);
 				}
 				$content = $this->container->get("view")->fetch($contentFile, $this->view->getVars());
 				$this->view->assign("layout_content", $content);
@@ -88,7 +88,7 @@ class Controller
 		}
 
 		if(!file_exists($templateFile)) {
-			throw new \Slim\Exception\HttpNotFoundException($this->request, "Arquivo " . $templateFile . " não encontrado");
+			throw new \Exception("Arquivo " . $templateFile . " não encontrado", 500);
 		}
 
 		return $this->container->get("view")->render($this->response, $templateFile, $this->view->getVars());
