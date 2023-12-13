@@ -70,6 +70,20 @@ class Bootstrap
 		$module = "";
 		if(isset($this->args['module'])) {
 			$module =  ucfirst($this->args['module']) . "\\";
+
+			// verify if has bootstrap per module
+			$bootstrapName = "\\" . $applicationName . "\\" . $module . "Bootstrap";
+			if(class_exists($bootstrapName)) {
+				$bootstrap = new $bootstrapName;
+
+				// execute methods of bootstrap
+				$methods = get_class_methods($bootstrap);
+				foreach($methods as $method) {
+					if(substr($method, 0, 4) == "init") {
+						$bootstrap->$method();
+					}
+				}
+			}
 		}
 
 		// Verify if controller exists with and without module (because the module can be passed as simple arg, and not as module)
