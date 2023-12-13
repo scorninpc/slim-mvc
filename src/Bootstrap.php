@@ -68,6 +68,7 @@ class Bootstrap
 
 		// Verify if there is a module variable
 		$module = "";
+		$bootstrapMethods = [];
 		if(isset($this->args['module'])) {
 			$module =  ucfirst($this->args['module']) . "\\";
 
@@ -76,9 +77,9 @@ class Bootstrap
 			if(class_exists($bootstrapName)) {
 				$bootstrap = new $bootstrapName;
 
-				// execute methods of bootstrap
-				$methods = get_class_methods($bootstrap);
-				foreach($methods as $method) {
+				// execute init methods of bootstrap
+				$bootstrapMethods = get_class_methods($bootstrap);
+				foreach($bootstrapMethods as $method) {
 					if(substr($method, 0, 4) == "init") {
 						$bootstrap->$method();
 					}
@@ -105,6 +106,13 @@ class Bootstrap
 			throw new \Exception("Action não encontrada", 404);
 		}
 		$ret = $this->controller->$action();
+
+		// execute halt methods of bootstrap if exists
+		foreach($bootstrapMethods as $method) {
+			if(substr($method, 0, 4) == "halt") {
+				$bootstrap->$method();
+			}
+		}
 	}
 
 	/**
