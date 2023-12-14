@@ -17,6 +17,9 @@ class Bootstrap
 	 */
 	public function __construct(\DI\Container $container, \Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, $args, $config=[])
 	{
+		// save instances
+		\Slim\Mvc\Factory::set("config", $config);
+
 		// Look if location are set
 		if(!isset($config['application']['name'])) {
 			if(!isset($config['application']['location'])) {
@@ -59,8 +62,10 @@ class Bootstrap
 			}
 		}
 
-		// Start the view
+		// Start the view and save instance
 		$this->view = new \Slim\Mvc\View();
+		\Slim\Mvc\Factory::set("view", $this->view);
+	
 
 		// Set custom config for view
 		$this->view->__basePath = $config['application']['basepath'];
