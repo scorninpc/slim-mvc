@@ -13,17 +13,25 @@ class ViewHelpers
 
 	public function __call($name, $args)
 	{
-		// Recupera o helper do projeto
-		$helperName = "\\Application\\Helpers\\View\\" . ucfirst($name);
+		// se houver modulo
+		$module = \Slim\Mvc\Factory::get("requestModuleName");
 		
+		// recupera o helper do projeto com o modulo
+		$helperName = "\\Application\\" . $module . "Helpers\\View\\" . ucfirst($name);
 		if(!class_exists($helperName)) {
-			throw new \Exception("Helper not found");
+
+			// recupera o helper do projeto sem o modulo
+			$helperName = "\\Application\\Helpers\\View\\" . ucfirst($name);
+			if(!class_exists($helperName)) {
+				throw new \Exception("View helper \"" . $name . "\" not found");
+			}
 		}
 		
-		// Cria o objeto
+		// cria o objeto
+		$config = \Slim\Mvc\Factory::get("config");
 		$helper = new $helperName($config);
 
-		// E chama
+		// e chama
 		return call_user_func_array([$helper, "call"], $args);
 	}
 }

@@ -19,7 +19,8 @@ class Bootstrap
 	{
 		// save instances
 		\Slim\Mvc\Factory::set("config", $config);
-
+		\Slim\Mvc\Factory::set("request", $request);
+		
 		// Look if location are set
 		if(!isset($config['application']['name'])) {
 			if(!isset($config['application']['location'])) {
@@ -69,13 +70,16 @@ class Bootstrap
 
 		// Set custom config for view
 		$this->view->__basePath = $config['application']['basepath'];
-		$this->view->__helpers = new \Slim\Mvc\ViewHelpers($request);
+		$this->view->this = new \Slim\Mvc\ViewHelpers($request);
 
 		// Verify if there is a module variable
 		$module = "";
 		$bootstrapMethods = [];
 		if(isset($this->args['module'])) {
 			$module =  ucfirst($this->args['module']) . "\\";
+
+			// @fix - adicionado no factory para conseguir usar no ViewHelper, mas precisa criar uma classe de request
+			\Slim\Mvc\Factory::set("requestModuleName", $module);
 
 			// verify if has bootstrap per module
 			$bootstrapName = "\\" . $applicationName . "\\" . $module . "Bootstrap";
