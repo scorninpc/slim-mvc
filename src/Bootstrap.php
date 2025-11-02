@@ -40,39 +40,14 @@ class Bootstrap
 
 		// Store application parameters
 		$this->container = $container;
-		$this->request = $request;
 		$this->response = $response;
-		$this->args = $args;
-
-		// Retrieve routes
-		$routes = $container->get("routes");
-
-		// Retrieve route name
-		$routeContext = \Slim\Routing\RouteContext::fromRequest($request);
-		$route = $routeContext->getRoute();
-		$name = $route->getName();
-
-		// cria o request
-		$this->request = \Slim\Mvc\Request::fromRequest($request);
-
-		// Retrieve the route infos
-		if(!isset($routes[$name])) {
-			throw new \Slim\Exception\HttpNotFoundException($request, "Rota não encontrada");
-		}
-		$route = $routes[$name];
-
-		// Verifica if there is a variable on URI or we need to add the default value
-		foreach($route['defaults'] as $arg_name => $arg_default) {
-			if(!isset($this->args[$arg_name])) {
-				$this->args[$arg_name] = $arg_default;
-			}
-		}
-
+		$this->request = \Slim\Mvc\Request::fromRequest($request, $container, $args);
+		$this->args = $this->request->getParams();
+		
 		// Start the view and save instance
 		$this->view = new \Slim\Mvc\View();
 		\Slim\Mvc\Factory::set("view", $this->view);
 	
-
 		// Set custom config for view
 		$this->view->__basePath = $config['application']['basepath'];
 		$this->view->this = new \Slim\Mvc\ViewHelpers($request);

@@ -19,16 +19,8 @@ class Controller
 		$this->response = $response;
 		$this->request = $request;
 		$this->view = $view;
-		
-		$params = $args['params'];
-		if($params) {
-			unset($args['params']);
-			$params_parts = explode("/", $params);
-			for($i=0; $i<count($params_parts); $i+=2) {
-				$args[$params_parts[$i]] = $params_parts[$i+1];
-			}
-		}
-		$this->args = $args;
+
+		$this->args = $this->request->getParams();
 	}
 
 	/**
