@@ -17,10 +17,12 @@ class Bootstrap
 	 */
 	public function __construct(\DI\Container $container, \Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, $args, $config=[])
 	{
-		
+		// inicia as sessões
+		session_start();
+
 		// save instances
 		\Slim\Mvc\Factory::set("config", $config);
-		\Slim\Mvc\Factory::set("request", $request);
+		\Slim\Mvc\Factory::set("container", $container);
 		
 		// Look if location are set
 		if(!isset($config['application']['name'])) {
@@ -37,12 +39,14 @@ class Bootstrap
 			$applicationName = $config['application']['name'];
 		}
 		
-
 		// Store application parameters
 		$this->container = $container;
 		$this->response = $response;
 		$this->request = \Slim\Mvc\Request::fromRequest($request, $container, $args);
 		$this->args = $this->request->getParams();
+
+		// armazena o request
+		\Slim\Mvc\Factory::set("request", $this->request);
 		
 		// Start the view and save instance
 		$this->view = new \Slim\Mvc\View();
@@ -83,7 +87,7 @@ class Bootstrap
 
 			// Create controller object
 			if(!class_exists($controllerName)) {
-				throw new \Exception("Controlador não encontrado", 404);
+				throw new \Exception("Controlador \"" . $controllerName . "\" não encontrado", 404);
 			}
 		}
 

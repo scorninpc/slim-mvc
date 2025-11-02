@@ -18,6 +18,11 @@ class Request extends \Slim\Psr7\Request
 	protected $original_request;
 
 	/**
+	 * armazena o router context
+	 */
+	protected $route_context;
+
+	/**
 	 * recria o request para usar o custom
 	 */
 	public static function fromRequest(\Slim\Psr7\Request $request, \DI\Container $container, $args)
@@ -48,9 +53,12 @@ class Request extends \Slim\Psr7\Request
 		$routes = $container->get("routes");
 
 		// recupera o nome da rota
-		$routeContext = \Slim\Routing\RouteContext::fromRequest($request);
-		$route = $routeContext->getRoute();
+		$route_context = \Slim\Routing\RouteContext::fromRequest($request);
+		$route = $route_context->getRoute();
 		$name = $route->getName();
+
+		// seta o route context
+		$object->setRouteContext($route_context);
 
 		// recupera as informações da rota
 		if(!isset($routes[$name])) {
@@ -92,6 +100,22 @@ class Request extends \Slim\Psr7\Request
 	public function setOriginalRequest($request) 
 	{
 		$this->original_request = $request;
+	}
+
+	/**
+	 * seta o router context
+	 */
+	public function setRouteContext($route_context) 
+	{
+		$this->route_context = $route_context;
+	}
+
+	/**
+	 * recupera o route context
+	 */
+	public function getRouteContext() 
+	{
+		return $this->route_context;
 	}
 
 	/**
