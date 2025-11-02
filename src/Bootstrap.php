@@ -17,6 +17,7 @@ class Bootstrap
 	 */
 	public function __construct(\DI\Container $container, \Psr\Http\Message\ServerRequestInterface $request, \Psr\Http\Message\ResponseInterface $response, $args, $config=[])
 	{
+		
 		// save instances
 		\Slim\Mvc\Factory::set("config", $config);
 		\Slim\Mvc\Factory::set("request", $request);
@@ -35,6 +36,7 @@ class Bootstrap
 		else {
 			$applicationName = $config['application']['name'];
 		}
+		
 
 		// Store application parameters
 		$this->container = $container;
@@ -49,6 +51,9 @@ class Bootstrap
 		$routeContext = \Slim\Routing\RouteContext::fromRequest($request);
 		$route = $routeContext->getRoute();
 		$name = $route->getName();
+
+		// cria o request
+		$this->request = \Slim\Mvc\Request::fromRequest($request);
 
 		// Retrieve the route infos
 		if(!isset($routes[$name])) {

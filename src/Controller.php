@@ -16,8 +16,8 @@ class Controller
 	public function __construct($view, $container, $request, $response, $args)
 	{
 		$this->container = $container;
-		$this->request = $request;
 		$this->response = $response;
+		$this->request = $request;
 		$this->view = $view;
 		
 		$params = $args['params'];
