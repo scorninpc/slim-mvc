@@ -25,6 +25,7 @@
     "require": {
         "slim/slim": "^4.0",
         "slim/psr7": "*",
+        "php-di/php-di": "*",
         "scorninpc/slim-smarty-view": "3.0.0.x-dev"
     },
     "autoload": {
