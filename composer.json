@@ -12,9 +12,19 @@
             "homepage": "https://andor.com.br"
         }
     ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "git@github.com:scorninpc/slim-smarty-view.git"
+        }
+    ],
+
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+
     "require": {
         "slim/slim": "^4.0",
-        "scorninpc/slim-smarty-view": "^2.0.0"
+        "scorninpc/slim-smarty-view": "3.0.0.x-dev"
     },
     "autoload": {
         "psr-4": {
