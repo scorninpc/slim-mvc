@@ -72,7 +72,12 @@ class Controller
 				// Render content template, and assign to template file
 				$contentFile = $module . "/Views/" . $this->getParam("controller") . "/" . $this->getParam("action") . ".tpl";
 				if(!file_exists($contentFile)) {
-					throw new \Exception("Arquivo " . $contentFile . " não encontrado", 500);
+
+					// If content template not exists, look at template dir too
+					$contentFile = $module . "/Views/layouts/" . strtolower($this->getParam("action")) . ".tpl";
+					if(!file_exists($contentFile)) {
+						throw new \Exception("Arquivo " . $contentFile . " não encontrado", 500);
+					}
 				}
 				$content = $this->container->get("view")->fetch($contentFile, $this->view->getVars());
 				$this->view->assign("layout_content", $content);
