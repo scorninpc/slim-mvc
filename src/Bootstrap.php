@@ -93,12 +93,7 @@ class Bootstrap
 
 		$this->controller = new $controllerName($this->view, $this->container, $this->request, $this->response, $this->args);
 
-		// Create and call action
-		$action = $this->args['action'] . "Action";
-		if(!is_callable([$this->controller, $action])) {
-			throw new \Exception("Action não encontrada", 404);
-		}
-		$ret = $this->controller->$action();
+		
 
 		// execute halt methods of bootstrap if exists
 		foreach($bootstrapMethods as $method) {
@@ -113,7 +108,21 @@ class Bootstrap
 	 */
 	public function getResponse() : \Psr\Http\Message\ResponseInterface
 	{
-		// Parse all the view
-		return $this->controller->run();
+		// Create and call action
+		$action = $this->args['action'] . "Action";
+		if(!is_callable([$this->controller, $action])) {
+			throw new \Exception("Action não encontrada", 404);
+		}
+		$ret = $this->controller->$action();
+
+		// If has return from action
+		if(!$ret) {
+			// Parse the template
+			return $this->controller->run();
+		}
+		else {
+			// else return the action data
+			return $ret;
+		}
 	}
 }
