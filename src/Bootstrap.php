@@ -10,6 +10,8 @@ class Bootstrap
 	private $args;
 	private $view;
 	private $controller;
+	private $bootstrap;
+	private $bootstrapMethods;
 
 
 	/**
@@ -68,13 +70,13 @@ class Bootstrap
 			// verify if has bootstrap per module
 			$bootstrapName = "\\" . $applicationName . "\\" . $module . "Bootstrap";
 			if(class_exists($bootstrapName)) {
-				$bootstrap = new $bootstrapName;
+				$this->bootstrap = new $bootstrapName;
 
 				// execute init methods of bootstrap
-				$bootstrapMethods = get_class_methods($bootstrap);
+				$bootstrapMethods = get_class_methods($this->bootstrap);
 				foreach($bootstrapMethods as $method) {
 					if(substr($method, 0, 4) == "init") {
-						$bootstrap->$method();
+						$this->bootstrap->$method();
 					}
 				}
 			}
@@ -92,20 +94,7 @@ class Bootstrap
 		}
 
 		$this->controller = new $controllerName($this->view, $this->container, $this->request, $this->response, $this->args);
-
-		// Create and call action
-		$action = $this->args['action'] . "Action";
-		if(!is_callable([$this->controller, $action])) {
-			throw new \Exception("Action não encontrada", 404);
-		}
-		$ret = $this->controller->$action();
-
-		// execute halt methods of bootstrap if exists
-		foreach($bootstrapMethods as $method) {
-			if(substr($method, 0, 4) == "halt") {
-				$bootstrap->$method();
-			}
-		}
+		$this->bootstrapMethods = $bootstrapMethods;
 	}
 
 	/**
@@ -113,7 +102,26 @@ class Bootstrap
 	 */
 	public function getResponse() : \Psr\Http\Message\ResponseInterface
 	{
-		// Parse all the view
-		return $this->controller->run();
+		// Create and call action
+		$action = $this->args['action'] . "Action";
+		if(!is_callable([$this->controller, $action])) {
+			throw new \Exception("Action não encontrada", 404);
+		}
+		$ret = $this->controller->$action();
+
+		// Just render template if action does not return nothing
+		if(!$ret) {
+			$ret = $this->controller->run();
+		}
+
+		// execute halt methods of bootstrap if exists
+		foreach($this->bootstrapMethods as $method) {
+			if(substr($method, 0, 4) == "halt") {
+				$this->bootstrap->$method();
+			}
+		}
+
+		// return
+		return $ret;
 	}
 }
