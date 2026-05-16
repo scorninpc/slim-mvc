@@ -115,6 +115,14 @@ class Controller
 	}
 
 	/**
+	 * seta o parametro
+	 */
+	public function setParam($name, $value)
+	{
+		$this->args[$name] = $value;
+	}
+
+	/**
 	 * 
 	 */
 	public function getPost($name, $default=NULL)
